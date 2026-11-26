@@ -376,16 +376,7 @@ class SettingsScreen extends ConsumerWidget {
                           for (final code in supportedLanguageCodes)
                             DropdownMenuItem(
                               value: code,
-                              child: Text(switch (code) {
-                                'en' => context.l10n.languageEnglish,
-                                'fr' => context.l10n.languageFrench,
-                                'es' => context.l10n.languageSpanish,
-                                'pt' => context.l10n.languagePortuguese,
-                                _ => context.byFormFactor(
-                                  context.l10n.languageSystem,
-                                  context.l10n.desktopLanguageSystem,
-                                ),
-                              }),
+                              child: Text(_languageLabel(context, code)),
                             ),
                         ],
                         onChanged: (v) => v == null
@@ -945,3 +936,16 @@ class _DrillRow extends StatelessWidget {
         ),
   );
 }
+
+/// The name of a Settings language ([supportedLanguageCodes]); '' follows
+/// the phone (or Windows).
+String _languageLabel(BuildContext context, String code) => switch (code) {
+  'en' => context.l10n.languageEnglish,
+  'fr' => context.l10n.languageFrench,
+  'es' => context.l10n.languageSpanish,
+  'pt' => context.l10n.languagePortuguese,
+  _ => context.byFormFactor(
+    context.l10n.languageSystem,
+    context.l10n.desktopLanguageSystem,
+  ),
+};
