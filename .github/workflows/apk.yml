@@ -1,0 +1,89 @@
+name: Build Android APK
+
+# Builds the arm64 phone APK and publishes it on the rolling "apk-latest"
+# release, so it can be downloaded from a fixed link:
+# https://github.com/<owner>/<repo>/releases/latest/download/OnDeviceLLM-arm64.apk
+#
+# Signing: set the repository secrets ANDROID_KEYSTORE_BASE64,
+# ANDROID_STORE_PASSWORD, ANDROID_KEY_ALIAS and ANDROID_KEY_PASSWORD to sign
+# with your own key (updates then install over each other). Without them the
+# APK is signed with the runner's throwaway debug key: it installs, but each
+# new build must replace the previous one by uninstalling it first.
+on:
+  push:
+    branches: [pt-pt, main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.5'
+          channel: stable
+          cache: true
+
+      - name: Use the release key when one is configured
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            {
+              echo "ODLLM_ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release.jks"
+              echo "ODLLM_ANDROID_STORE_PASSWORD=$STORE_PASSWORD"
+              echo "ODLLM_ANDROID_KEY_ALIAS=$KEY_ALIAS"
+              echo "ODLLM_ANDROID_KEY_PASSWORD=$KEY_PASSWORD"
+            } >> "$GITHUB_ENV"
+            echo "Signing with the release key."
+          else
+            echo "::warning::No signing secrets: the APK uses a throwaway debug key."
+          fi
+
+      - name: Build the APK
+        run: bash scripts/build_android.sh
+        env:
+          ODLLM_ABI: arm64-v8a
+
+      - name: Name the APK
+        run: |
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk dist/OnDeviceLLM-arm64.apk
+          sha256sum dist/OnDeviceLLM-arm64.apk | tee dist/OnDeviceLLM-arm64.apk.sha256
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OnDeviceLLM-arm64-apk
+          path: dist/
+
+      - name: Publish on the apk-latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes="Build of ${GITHUB_REF_NAME} at ${GITHUB_SHA::7} ($(date -u +'%Y-%m-%d %H:%M UTC')). Android arm64 (phones)."
+          # Move the rolling tag to this build's commit.
+          git tag -f apk-latest "$GITHUB_SHA"
+          git push -f origin refs/tags/apk-latest
+          if gh release view apk-latest >/dev/null 2>&1; then
+            gh release edit apk-latest --title "APK (${GITHUB_REF_NAME})" --notes "$notes" --latest
+          else
+            gh release create apk-latest --title "APK (${GITHUB_REF_NAME})" --notes "$notes" --target "$GITHUB_SHA" --latest
+          fi
+          gh release upload apk-latest dist/OnDeviceLLM-arm64.apk dist/OnDeviceLLM-arm64.apk.sha256 --clobber
