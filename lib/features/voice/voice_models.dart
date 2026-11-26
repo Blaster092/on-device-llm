@@ -257,7 +257,7 @@ class VoiceModels {
   static const legacySupertonicDir =
       'sherpa-onnx-supertonic-tts-int8-2026-03-06';
 
-  /// Languages Supertonic 3 reads. The app's three are all here; a code
+  /// Languages Supertonic 3 reads. The app's four are all here; a code
   /// outside the list falls back to English as before.
   static const supertonicLanguages = {
     'en',
@@ -661,6 +661,15 @@ class KokoroVoice {
     ],
     'fr': [KokoroVoice(30, 'fr', 'Siwis')],
     'es': [KokoroVoice(28, 'es', 'Dora'), KokoroVoice(29, 'es', 'Alex')],
+    // Kokoro v1.0 has no voice from Portugal: pf_dora, pm_alex and
+    // pm_santa were trained on Brazilian Portuguese, so they keep the
+    // Brazilian phonemes and are named as such. Supertonic 3 ('pt') is the
+    // other choice for Portuguese.
+    'pt': [
+      KokoroVoice(42, 'pt-br', 'Dora (Brasil)'),
+      KokoroVoice(43, 'pt-br', 'Alex (Brasil)'),
+      KokoroVoice(44, 'pt-br', 'Santa (Brasil)'),
+    ],
   };
 
   static KokoroVoice forLanguage(String code, {int? sid}) {

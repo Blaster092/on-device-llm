@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_pt.dart';
 
 // ignore_for_file: type=lint
 
@@ -98,6 +99,7 @@ abstract class AppLocalizations {
     Locale('en'),
     Locale('es'),
     Locale('fr'),
+    Locale('pt'),
   ];
 
   /// No description provided for @settingScopeHint.
@@ -981,6 +983,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Español'**
   String get languageSpanish;
+
+  /// No description provided for @languagePortuguese.
+  ///
+  /// In en, this message translates to:
+  /// **'Português (Portugal)'**
+  String get languagePortuguese;
 
   /// No description provided for @resetToDefaults.
   ///
@@ -14125,7 +14133,7 @@ abstract class AppLocalizations {
   /// No description provided for @readingVoiceHint.
   ///
   /// In en, this message translates to:
-  /// **'Compare Kokoro and Supertonic 3 in English, French and Spanish. Download the selected voice below. Supertonic 3 weights: OpenRAIL-M; code: MIT.'**
+  /// **'Compare Kokoro and Supertonic 3 in English, French, Spanish and Portuguese. Kokoro\'s Portuguese voices are Brazilian. Download the selected voice below. Supertonic 3 weights: OpenRAIL-M; code: MIT.'**
   String get readingVoiceHint;
 
   /// No description provided for @supertonicSpeakingPack.
@@ -17377,7 +17385,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'es', 'fr'].contains(locale.languageCode);
+      <String>['en', 'es', 'fr', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -17392,6 +17400,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEs();
     case 'fr':
       return AppLocalizationsFr();
+    case 'pt':
+      return AppLocalizationsPt();
   }
 
   throw FlutterError(

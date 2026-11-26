@@ -239,6 +239,7 @@ class VoiceNotifier extends Notifier<VoiceState> {
     String? localeId,
   }) async {
     if (state.listening) return stop();
+    localeId ??= systemSpeechLocale(ref.read(settingsProvider).localeCode);
     final epoch = ++_listenEpoch;
     final previousStart = _listenStarting;
     final starting = Completer<void>();
@@ -596,7 +597,13 @@ class VoiceNotifier extends Notifier<VoiceState> {
     if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return true;
     final voices = await _tts!.getVoices;
     if (voices is! List) return false;
-    final lang = voiceLanguage(ref.read(settingsProvider).localeCode);
+    final localeCode = ref.read(settingsProvider).localeCode;
+    final lang = voiceLanguage(localeCode);
+    // Portugal's voice before Brazil's when both are installed.
+    final preferred = systemSpeechLocale(
+      localeCode,
+    )?.toLowerCase().replaceAll('_', '-');
+    Map<String, String>? fallback;
     for (final voice in voices) {
       if (voice is! Map ||
           !(voice['network_required'] == '0' ||
@@ -607,7 +614,17 @@ class VoiceNotifier extends Notifier<VoiceState> {
       }
       final locale = voice['locale'] as String;
       if (locale.split(RegExp('[-_]')).first != lang) continue;
-      await _tts!.setVoice({'name': voice['name'] as String, 'locale': locale});
+      final pick = {'name': voice['name'] as String, 'locale': locale};
+      if (preferred != null &&
+          locale.toLowerCase().replaceAll('_', '-') != preferred) {
+        fallback ??= pick;
+        continue;
+      }
+      await _tts!.setVoice(pick);
+      return true;
+    }
+    if (fallback != null) {
+      await _tts!.setVoice(fallback);
       return true;
     }
     return false;

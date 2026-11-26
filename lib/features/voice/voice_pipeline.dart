@@ -15,12 +15,24 @@ import 'package:ondevice_llm/core/logging/quiet_failure.dart';
 final _log = Logger('voice');
 
 /// The language the voice uses: the app language when set, else the
-/// phone's, limited to the three the app speaks.
+/// phone's, limited to the four the app speaks.
 String voiceLanguage(String localeCode) {
   final code = localeCode.isNotEmpty
       ? localeCode
       : PlatformDispatcher.instance.locale.languageCode;
-  return const {'en', 'fr', 'es'}.contains(code) ? code : 'en';
+  return const {'en', 'fr', 'es', 'pt'}.contains(code) ? code : 'en';
+}
+
+/// The locale for the system recognizer and voice: Portugal's for the
+/// app's Portuguese, unless the app follows a phone set to Brazilian
+/// Portuguese. Null keeps the phone's own choice (the other languages).
+String? systemSpeechLocale(String localeCode) {
+  if (voiceLanguage(localeCode) != 'pt') return null;
+  if (localeCode.isEmpty &&
+      PlatformDispatcher.instance.locale.countryCode == 'BR') {
+    return 'pt-BR';
+  }
+  return 'pt-PT';
 }
 
 /// Sound tags Supertonic understands inside the text. Kokoro and the

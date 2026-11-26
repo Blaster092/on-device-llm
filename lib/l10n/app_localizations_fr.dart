@@ -488,6 +488,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get languageSpanish => 'Español';
 
   @override
+  String get languagePortuguese => 'Português (Portugal)';
+
+  @override
   String get resetToDefaults => 'Rétablir les valeurs par défaut';
 
   @override
@@ -8404,7 +8407,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get readingVoiceHint =>
-      'Comparez Kokoro et Supertonic 3 en anglais, français et espagnol. Téléchargez la voix choisie ci-dessous. Poids Supertonic 3 : OpenRAIL-M ; code : MIT.';
+      'Comparez Kokoro et Supertonic 3 en anglais, français, espagnol et portugais. Les voix portugaises de Kokoro sont brésiliennes. Téléchargez la voix choisie ci-dessous. Poids Supertonic 3 : OpenRAIL-M ; code : MIT.';
 
   @override
   String get supertonicSpeakingPack => 'Parole (Supertonic 3)';

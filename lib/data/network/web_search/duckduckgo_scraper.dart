@@ -80,9 +80,9 @@ class DuckDuckGoScraper {
         .split('_');
     final requested = appLanguage.trim().toLowerCase();
     final asked = requested.isEmpty ? parts.first.toLowerCase() : requested;
-    // French and Spanish are the app's other languages: a Spanish speaker
-    // in the US got English results and news (audit P2-46).
-    final language = asked == 'fr' || asked == 'es' ? asked : 'en';
+    // French, Spanish and Portuguese are the app's other languages: a
+    // Spanish speaker in the US got English results and news (audit P2-46).
+    final language = const {'fr', 'es', 'pt'}.contains(asked) ? asked : 'en';
     final country = parts.length > 1 ? parts[1].toUpperCase() : '';
     final localized = _localizedRegions['$country|$language'];
     if (localized != null) return localized;
@@ -91,6 +91,8 @@ class DuckDuckGoScraper {
       final home = _countryRegions[country];
       return home != null && home.endsWith('-es') ? home : 'es-es';
     }
+    // The app's Portuguese is Portugal's: Brazil keeps its own results.
+    if (language == 'pt') return country == 'BR' ? 'br-pt' : 'pt-pt';
     return _countryRegions[country] ?? 'wt-wt';
   }
 

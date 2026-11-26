@@ -31,11 +31,11 @@ extension _ChatPrompt on ChatNotifier {
     // the prompt-level nudge.
     _primeThinking(system, settings, engine);
     final turnNotes = StringBuffer();
-    // A French or Spanish question gets its answer in that language, with
-    // or without sources (tester, 2026-10-19).
+    // A French, Spanish or Portuguese question gets its answer in that
+    // language, with or without sources (tester, 2026-10-19).
     final asked = WikipediaClient.languageFor(input, 'en');
     if (asked != 'en') {
-      final language = asked == 'fr' ? 'French' : 'Spanish';
+      final language = WikipediaClient.answerLanguage(asked);
       turnNotes.write('\nThe user writes in $language: answer in $language.');
     }
     if (planned.selfQuestion) {

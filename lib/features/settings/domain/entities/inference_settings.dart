@@ -1676,7 +1676,7 @@ class InferenceSettings {
       listeningModel: text('listeningModel', 32) == 'parakeet-v3'
           ? 'parakeet-v3'
           : '',
-      localeCode: const {'en', 'fr', 'es'}.contains(text('localeCode', 8))
+      localeCode: const {'en', 'fr', 'es', 'pt'}.contains(text('localeCode', 8))
           ? text('localeCode', 8)
           : '',
       searchRegion: searchRegions.contains(text('searchRegion', 8))

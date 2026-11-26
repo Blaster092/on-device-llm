@@ -79,6 +79,44 @@ class PromptShortcutI18n {
     ),
   };
 
+  static const _pt = {
+    'summarize': (
+      'Resume o seguinte em 3 a 5 pontos curtos, mantendo exatos os nomes, os números e as datas.\n\n{input}',
+      'Resumir o texto em poucos pontos',
+      '',
+    ),
+    'translate': (
+      'Traduz o seguinte texto para {arg}. Responde apenas com a tradução.\n\n{input}',
+      'Traduzir — /translate en <texto>',
+      'inglês',
+    ),
+    'fix': (
+      'Corrige a ortografia, a gramática e a pontuação do seguinte texto. Mantém o sentido, o tom e a língua. Responde apenas com o texto corrigido.\n\n{input}',
+      'Corrigir ortografia e gramática',
+      '',
+    ),
+    'shorter': (
+      'Reescreve o seguinte com cerca de metade do tamanho, sem perder nenhum dado. Responde apenas com a nova versão.\n\n{input}',
+      'Encurtar o texto',
+      '',
+    ),
+    'explain': (
+      'Explica o seguinte por palavras simples, para alguém que não conhece o tema, com um exemplo concreto.\n\n{input}',
+      'Explicar de forma simples',
+      '',
+    ),
+    'email': (
+      'Redige um e-mail claro e cordial a partir destas notas. Sê breve e termina com o próximo passo.\n\n{input}',
+      'Transformar notas num e-mail',
+      '',
+    ),
+    'code-review': (
+      'Revê este código. Enumera primeiro os erros reais (com a linha e uma correção) e depois as melhorias claras. Não repitas o código.\n\n{input}',
+      'Rever código: erros e melhorias',
+      '',
+    ),
+  };
+
   /// Language names for /translate's first word, in the prompt's language.
   static const languageNames = {
     'en': {
@@ -138,6 +176,25 @@ class PromptShortcutI18n {
       'ko': 'coreano',
       'hi': 'hindi',
     },
+    'pt': {
+      'en': 'inglês',
+      'fr': 'francês',
+      'es': 'espanhol',
+      'de': 'alemão',
+      'it': 'italiano',
+      'pt': 'português',
+      'nl': 'neerlandês',
+      'ro': 'romeno',
+      'pl': 'polaco',
+      'ru': 'russo',
+      'uk': 'ucraniano',
+      'tr': 'turco',
+      'ar': 'árabe',
+      'zh': 'chinês',
+      'ja': 'japonês',
+      'ko': 'coreano',
+      'hi': 'hindi',
+    },
   };
 
   /// (template, description, defaultArg) of built-in [name] in [lang], or
@@ -146,6 +203,7 @@ class PromptShortcutI18n {
       switch (lang) {
         'fr' => _fr[name],
         'es' => _es[name],
+        'pt' => _pt[name],
         _ => null,
       };
 }

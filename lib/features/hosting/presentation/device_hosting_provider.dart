@@ -216,7 +216,7 @@ class DeviceHostingState {
     error:
         error ??
         (pairCode != null &&
-                ['en', 'fr', 'es'].any(
+                ['en', 'fr', 'es', 'pt'].any(
                   (locale) => this.error == stringsFor(locale).hostPairLocked,
                 )
             ? null

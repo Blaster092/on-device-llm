@@ -175,6 +175,7 @@
   "languageEnglish": "English",
   "languageFrench": "Français",
   "languageSpanish": "Español",
+  "languagePortuguese": "Português (Portugal)",
   "resetToDefaults": "Reset to defaults",
   "sectionAssistant": "Assistant",
   "thinkingMode": "Thinking mode",
@@ -4580,7 +4581,7 @@
   "helperTask": "Task",
   "helperResult": "Result",
   "readingVoiceTitle": "Reading voice",
-  "readingVoiceHint": "Compare Kokoro and Supertonic 3 in English, French and Spanish. Download the selected voice below. Supertonic 3 weights: OpenRAIL-M; code: MIT.",
+  "readingVoiceHint": "Compare Kokoro and Supertonic 3 in English, French, Spanish and Portuguese. Kokoro's Portuguese voices are Brazilian. Download the selected voice below. Supertonic 3 weights: OpenRAIL-M; code: MIT.",
   "supertonicSpeakingPack": "Speaking (Supertonic 3)",
   "supertonicSpeaker": "Voice {number}",
   "@supertonicSpeaker": {

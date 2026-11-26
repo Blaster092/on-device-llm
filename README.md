@@ -60,7 +60,7 @@ ChatGPT or Gemini.
 | ⚖️ | **Compare models** (Windows) | Send the same prompt to two models side by side and keep the results. |
 | 🔌 | **Local OpenAI-compatible server** (Windows) | An OpenAI- and Anthropic-compatible API on your PC for other apps, protected by a token. |
 | 📱 | **Phone + PC together** | Pair the phone with your PC and run big models, agents, searches and file analysis on the PC while the phone shows everything live. |
-| 🌍 | **English, French and Spanish** | Full interface in three languages, with dark and light themes. |
+| 🌍 | **English, French, Spanish and Portuguese (Portugal)** | Full interface in four languages, with dark and light themes. |
 
 ## Quick start
 
@@ -425,7 +425,9 @@ your own computer and use it from your phone too.
   not gain OnDevice LLM's server workspace endpoints.
 
 **Everywhere**
-- English, French and Spanish.
+- English, French, Spanish and Portuguese (Portugal). In Portuguese the
+  system dictation and system voice ask for pt-PT; Kokoro's Portuguese voices
+  are Brazilian, Supertonic 3 reads Portuguese without choosing a variant.
 - Dark and warm-grey light themes, accent colours, text scaling and a motion
   setting.
 
@@ -653,7 +655,7 @@ connections are separate settings that you turn on yourself.
 - **On the phone, the GPU is optional and not faster for writing.** OpenCL
   speeds up reading long prompts on Adreno GPUs, but the CPU writes answers
   as fast or faster. The NPU is not used.
-- **French and Spanish need a native-speaker review.**
+- **French, Spanish and Portuguese need a native-speaker review.**
 - **The update check is manual.** In Settings > About, **Check for updates**
   asks GitHub for the latest release and links to it; the app never checks for app updates on
   its own (only signed engine packs on Windows, see above). On GitHub, choose **Watch → Custom → Releases** to be notified.

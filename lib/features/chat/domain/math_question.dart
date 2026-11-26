@@ -34,6 +34,8 @@ abstract final class MathQuestion {
       final result = Calculator.format(Calculator.evaluate(e));
       final lang = _french.hasMatch(input.toLowerCase())
           ? 'fr'
+          : _portuguese.hasMatch(input.toLowerCase())
+          ? 'pt'
           : _spanish.hasMatch(input.toLowerCase())
           ? 'es'
           : 'en';
@@ -56,10 +58,12 @@ abstract final class MathQuestion {
           .replaceAll(RegExp(r'[()]'), '')
           .replaceAll(RegExp(r'\s+'), ' ')
           .trim();
-      if (lang == 'fr') said = said.replaceAll(RegExp(r'(?<=\d)\.(?=\d)'), ',');
+      if (lang == 'fr' || lang == 'pt') {
+        said = said.replaceAll(RegExp(r'(?<=\d)\.(?=\d)'), ',');
+      }
       final shown = result.startsWith('-')
           ? '${w['-']} ${result.substring(1)}'
-          : lang == 'fr'
+          : lang == 'fr' || lang == 'pt'
           ? result.replaceAll('.', ',')
           : result;
       return '$said ${w['is']} $shown.';
@@ -70,6 +74,12 @@ abstract final class MathQuestion {
 
   static final _french = RegExp(
     r'\b(?:combien|fait|font|fois|moins|divisé|calcule|ça|cela|égal|racine)\b',
+    unicode: true,
+  );
+
+  /// Checked before Spanish, which shares "menos" and "por".
+  static final _portuguese = RegExp(
+    r'(?:quanto|quantos|vezes|(?:^|\s)(?:é|dá|são|mais)(?=\s|$))',
     unicode: true,
   );
   static final _spanish = RegExp(
@@ -97,6 +107,16 @@ abstract final class MathQuestion {
       '^': 'puissance',
       'sqrt': 'la racine carrée de',
       'is': 'égale',
+    },
+    'pt': {
+      '+': 'mais',
+      '-': 'menos',
+      '*': 'vezes',
+      '/': 'a dividir por',
+      '^2': 'ao quadrado',
+      '^': 'elevado a',
+      'sqrt': 'a raiz quadrada de',
+      'is': 'é',
     },
     'es': {
       '+': 'más',
@@ -319,17 +339,17 @@ abstract final class MathQuestion {
     (RegExp(r'\b(?:to the power of|raised to)\b'), '^'),
     (
       RegExp(
-        r'\bmultiplied by\b|\btimes\b|(?<=\d)\s+x\s+(?=\d)|\bfois\b|(?<=\d)\s+por\s+(?=\d)',
+        r'\bmultiplied by\b|\btimes\b|(?<=\d)\s+x\s+(?=\d)|\bfois\b|\bvezes\b|(?<=\d)\s+por\s+(?=\d)',
       ),
       '*',
     ),
     (
       RegExp(
-        r'\bdivided by\b|\bdivisé par\b|\bdividido (?:entre|por)\b|(?<=\d)\s+over\s+(?=\d)',
+        r'\bdivided by\b|\bdivisé par\b|\bdividido (?:entre|por)\b|\ba dividir por\b|(?<=\d)\s+over\s+(?=\d)',
       ),
       '/',
     ),
-    (RegExp(r'\bplus\b|\bmás\b|\bmas\b'), '+'),
+    (RegExp(r'\bplus\b|\bmás\b|\bmas\b|(?<=\d)\s+mais\s+(?=\d)'), '+'),
     (RegExp(r'\bminus\b|\bmoins\b|\bmenos\b|(?<=\d)\s+-\s+(?=[\d(])'), '-'),
     (RegExp(r'(?<=[\d)])\s+squared\b'), '^ 2'),
     (RegExp(r'(?<=[\d)])\s+cubed\b'), '^ 3'),
@@ -386,6 +406,11 @@ abstract final class MathQuestion {
     'es',
     'son',
     'calcula',
+    'quanto',
+    'quantos',
+    'é',
+    'dá',
+    'são',
     'wait',
     'um',
     'uh',

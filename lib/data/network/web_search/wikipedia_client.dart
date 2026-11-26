@@ -34,7 +34,16 @@ class WikipediaClient {
       _timeout = timeout;
 
   /// Languages the app speaks; any other locale reads English Wikipedia.
-  static const languages = {'en', 'fr', 'es'};
+  static const languages = {'en', 'fr', 'es', 'pt'};
+
+  /// The English name of [code] for prompts ("answer in …"). The app's
+  /// Portuguese is Portugal's.
+  static String answerLanguage(String code) => switch (code) {
+    'fr' => 'French',
+    'es' => 'Spanish',
+    'pt' => 'European Portuguese (Portugal)',
+    _ => 'English',
+  };
 
   /// Longest article text kept. Passages are ranked against the question
   /// afterwards, so this only bounds memory; the lead and the sections
@@ -262,7 +271,7 @@ class WikipediaClient {
   }
 
   /// The Wikipedia to ask: the question's own language when its wording
-  /// shows one (French or Spanish function words), else the app's.
+  /// shows one (French, Spanish or Portuguese function words), else the app's.
   ///
   /// Another language than the app's needs two of its words, or one with
   /// its own spelling (an accent, "¿", "qu'"): "Explain le Chatelier
@@ -275,15 +284,16 @@ class WikipediaClient {
     final words = prose.toLowerCase().split(
       RegExp(r"[^\p{L}]+", unicode: true),
     );
-    var fr = 0, es = 0, en = 0;
+    var fr = 0, es = 0, pt = 0, en = 0;
     for (final w in words) {
       if (_fr.contains(w)) fr++;
       if (_es.contains(w)) es++;
+      if (_pt.contains(w)) pt++;
       if (_en.contains(w)) en++;
     }
     final app = appLanguage.toLowerCase().split(RegExp('[-_]')).first;
     final fallback = languages.contains(app) ? app : 'en';
-    final best = [('fr', fr), ('es', es), ('en', en)]
+    final best = [('fr', fr), ('es', es), ('pt', pt), ('en', en)]
       ..sort((a, b) => b.$2.compareTo(a.$2));
     final (lang, count) = best.first;
     if (count == 0 || count <= best[1].$2) return fallback;
@@ -294,6 +304,7 @@ class WikipediaClient {
         unicode: true,
       ),
       'es' => RegExp(r'[¿¡ñáéíóú]', unicode: true),
+      'pt' => RegExp(r'[ãõçâêôà]|ção\b', unicode: true),
       _ => RegExp(r'^\p{L}'),
     }.hasMatch(prose.toLowerCase());
     return spelled ? lang : fallback;
@@ -348,6 +359,41 @@ class WikipediaClient {
     'y',
     'son',
     'está',
+  };
+  static const _pt = {
+    'o',
+    'tem',
+    'têm',
+    'há',
+    'pelo',
+    'pela',
+    'os',
+    'é',
+    'são',
+    'qual',
+    'quais',
+    'quanto',
+    'quantos',
+    'quantas',
+    'porque',
+    'porquê',
+    'quem',
+    'da',
+    'dos',
+    'das',
+    'uma',
+    'com',
+    'não',
+    'na',
+    'nas',
+    'nos',
+    'isto',
+    'este',
+    'esta',
+    'onde',
+    'estão',
+    'também',
+    'foi',
   };
   static const _en = {
     'the',

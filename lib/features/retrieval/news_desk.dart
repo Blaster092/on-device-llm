@@ -598,6 +598,19 @@ class NewsDesk {
         NewsCategory.national,
       ),
     ],
+    // The app's Portuguese is Portugal's: region 'pt-pt' and language 'pt'.
+    'pt': [
+      NewsFeed(
+        'RTP Notícias',
+        'https://www.rtp.pt/noticias/rss',
+        NewsCategory.national,
+      ),
+      NewsFeed(
+        'Observador',
+        'https://observador.pt/feed/',
+        NewsCategory.national,
+      ),
+    ],
   };
 
   /// Section feeds in English, used for any region.

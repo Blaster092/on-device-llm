@@ -314,6 +314,10 @@ class _GeneralSettings extends ConsumerWidget {
                         value: 'es',
                         child: Text(l10n.languageSpanish),
                       ),
+                      DropdownMenuItem(
+                        value: 'pt',
+                        child: Text(l10n.languagePortuguese),
+                      ),
                     ],
                     onChanged: (v) => set(s.copyWith(localeCode: v ?? '')),
                   ),

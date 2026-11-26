@@ -43,6 +43,8 @@ abstract final class AboutUser {
         ? 'fr'
         : _nameQuestionEs.hasMatch(q)
         ? 'es'
+        : _nameQuestionPt.hasMatch(q)
+        ? 'pt'
         : null;
     if (lang == null) return null;
     String? name;
@@ -58,6 +60,7 @@ abstract final class AboutUser {
     return switch (lang) {
       'fr' => 'Tu t’appelles $name.',
       'es' => 'Te llamas $name.',
+      'pt' => 'Chamas-te $name.',
       _ => 'Your name is $name.',
     };
   }
@@ -245,7 +248,8 @@ abstract final class AboutUser {
     unicode: true,
   );
 
-  static const _lead = r"^(?:(?:and|so|ok(?:ay)?|hey|now|then|et|y)[,\s]+)*";
+  static const _lead =
+      r"^(?:(?:and|so|ok(?:ay)?|hey|now|then|et|y|e|então)[,\s]+)*";
   static final _nameQuestionEn = RegExp(
     "$_lead(?:what(?:'s|’s| is) my name|do you (?:know|remember) my name|what am I called|who am I)\\s*[?.!]*\$",
     caseSensitive: false,
@@ -257,6 +261,12 @@ abstract final class AboutUser {
   );
   static final _nameQuestionEs = RegExp(
     "$_lead¿?(?:c[óo]mo me llamo|cu[áa]l es mi nombre|(?:sabes|recuerdas) (?:c[óo]mo me llamo|mi nombre))\\s*[?.!]*\$",
+    caseSensitive: false,
+    unicode: true,
+  );
+
+  static final _nameQuestionPt = RegExp(
+    "$_lead(?:como (?:é que )?(?:me chamo|eu me chamo)|qual (?:é )?o meu nome|sabes (?:como me chamo|o meu nome)|lembras-te (?:de como me chamo|do meu nome))\\s*[?.!]*\$",
     caseSensitive: false,
     unicode: true,
   );
@@ -571,11 +581,23 @@ abstract final class AboutUser {
 
   /// "My name is Robin", "je m'appelle Léa", "me llamo Ana".
   static final _gaveName = RegExp(
-    r"\b(?:my name is|my name['’]s|call me|je m['’]appelle|mon (?:nom|prénom) est|me llamo|mi nombre es)\s+(\p{L}[\p{L}'’-]*)",
+    r"\b(?:my name is|my name['’]s|call me|je m['’]appelle|mon (?:nom|prénom) est|me llamo|mi nombre es|chamo-me|o meu nome é)\s+(\p{L}[\p{L}'’-]*)",
     caseSensitive: false,
     unicode: true,
   );
-  static const _notAName = {'not', 'a', 'an', 'the', 'pas', 'un', 'une', 'no'};
+  static const _notAName = {
+    'not',
+    'a',
+    'an',
+    'the',
+    'pas',
+    'un',
+    'une',
+    'no',
+    'um',
+    'uma',
+    'não',
+  };
 
   /// Whether [input] asks about the user's own facts.
   ///
